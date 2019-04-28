@@ -69,10 +69,10 @@ export default class RoomProvider extends Component {
     });
     return tempItems;
   }
-  setRoom = slug => {
+  getRoom = slug => {
     let tempRooms = [...this.state.rooms];
     const room = tempRooms.find(room => room.slug === slug);
-    localStorage.setItem("single-room", JSON.stringify(room));
+    return room;
   };
   handleChange = event => {
     const target = event.target;
@@ -135,7 +135,7 @@ export default class RoomProvider extends Component {
       <RoomContext.Provider
         value={{
           ...this.state,
-          setRoom: this.setRoom,
+          getRoom: this.getRoom,
           handleChange: this.handleChange
         }}
       >

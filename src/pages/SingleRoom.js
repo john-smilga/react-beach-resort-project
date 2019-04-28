@@ -4,43 +4,33 @@ import Hero from "../components/Hero";
 import Banner from "../components/Banner";
 import { Link } from "react-router-dom";
 import StyledHero from "../components/StyledHero";
+import { RoomContext } from "../context";
 export default class SingleRoom extends Component {
-  // constructor(props) {
-  //   super(props);
+  constructor(props) {
+    super(props);
+    console.log(this.props);
+    this.state = {
+      error: true,
+      slug: this.props.match.params.slug,
+      defaultBcg: defaultBcg
+    };
+  }
+  static contextType = RoomContext;
+
+  // componentDidMount() {
   //   console.log(this.props);
   // }
-  state = {
-    error: true,
-    room: {},
-    mainBcg: defaultBcg,
-    images: []
-  };
-  componentDidMount() {
-    // console.log(this.props);
-    const room = JSON.parse(localStorage.getItem("single-room"));
-    const [mainBcg, ...images] = room.images;
-    this.setState({ room, error: false, mainBcg, images });
-  }
   render() {
-    // console.log(this.state);
+    const { getRoom } = this.context;
+    const room = getRoom(this.state.slug);
 
-    const { mainBcg, error, images } = this.state;
-    const {
-      name,
-      description,
-      capacity,
-      size,
-      price,
-      extras,
-      breakfast,
-      pets
-    } = this.state.room;
-    console.log(this.state);
-
-    if (error) {
+    if (!room) {
+      setTimeout(() => {
+        this.props.history.push("/");
+      }, 3000);
       return (
         <div className="error">
-          <h3> an error occurred...</h3>
+          <h3> no such room could be found...</h3>
           <button
             type="button"
             className="btn-primary"
@@ -53,6 +43,17 @@ export default class SingleRoom extends Component {
         </div>
       );
     }
+    const {
+      name,
+      description,
+      capacity,
+      size,
+      price,
+      extras,
+      breakfast,
+      pets,
+      images
+    } = room;
     // return (
     //   <>
     //     <Hero hero="roomsHero">
@@ -66,7 +67,7 @@ export default class SingleRoom extends Component {
     // );
     return (
       <>
-        <StyledHero img={mainBcg}>
+        <StyledHero img={images[0] || this.state.defaultBcg}>
           <Banner title={`${name} room`}>
             <Link to="/rooms" className="btn-primary">
               back to rooms
