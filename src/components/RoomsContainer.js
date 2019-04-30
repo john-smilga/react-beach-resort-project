@@ -34,7 +34,7 @@ export default withRoomConsumer(RoomContainer);
 //         }
 //         return (
 //           <>
-//             <RoomsFilter />
+//             <RoomsFilter rooms={rooms} />
 //             <RoomsList rooms={sortedRooms} setRoom={setRoom} />
 //           </>
 //         );

@@ -3,14 +3,14 @@ import defaultBcg from "../images/room-1.jpeg";
 import Hero from "../components/Hero";
 import Banner from "../components/Banner";
 import { Link } from "react-router-dom";
-import StyledHero from "../components/StyledHero";
 import { RoomContext } from "../context";
+
+import StyledHero from "../components/StyledHero";
 export default class SingleRoom extends Component {
   constructor(props) {
     super(props);
     console.log(this.props);
     this.state = {
-      error: true,
       slug: this.props.match.params.slug,
       defaultBcg: defaultBcg
     };
@@ -25,21 +25,12 @@ export default class SingleRoom extends Component {
     const room = getRoom(this.state.slug);
 
     if (!room) {
-      setTimeout(() => {
-        this.props.history.push("/");
-      }, 3000);
       return (
         <div className="error">
           <h3> no such room could be found...</h3>
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => {
-              this.props.history.push("/");
-            }}
-          >
-            return home
-          </button>
+          <Link to="/rooms" className="btn-primary">
+            back to rooms
+          </Link>
         </div>
       );
     }
@@ -54,17 +45,9 @@ export default class SingleRoom extends Component {
       pets,
       images
     } = room;
-    // return (
-    //   <>
-    //     <Hero hero="roomsHero">
-    //       <Banner title={`${name} room`}>
-    //         <Link to="/rooms" className="btn-primary">
-    //           back to rooms
-    //         </Link>
-    //       </Banner>
-    //     </Hero>
-    //   </>
-    // );
+    const [main, ...defaultImages] = images;
+    console.log(defaultImages);
+
     return (
       <>
         <StyledHero img={images[0] || this.state.defaultBcg}>
@@ -76,7 +59,7 @@ export default class SingleRoom extends Component {
         </StyledHero>
         <section className="single-room">
           <div className="single-room-images">
-            {images.map((item, index) => (
+            {defaultImages.map((item, index) => (
               <img key={index} src={item} alt={name} />
             ))}
           </div>
